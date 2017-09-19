@@ -6,6 +6,7 @@ import enums.CardValue;
 import inf.EnumService;
 
 public class MyApplication {
+	
 	private final EnumService mega;
 	 @Inject
     public MyApplication(EnumService mega) {
