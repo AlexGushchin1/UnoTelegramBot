@@ -64,6 +64,7 @@ public class CardBox {
 		
 	}
 		
+		
 		log.info("Создан новый набор карт{} : "+ card.size() );
 		
 		
