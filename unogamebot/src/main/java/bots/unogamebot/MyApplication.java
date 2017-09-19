@@ -10,6 +10,7 @@ public class MyApplication {
 	 @Inject
     public MyApplication(EnumService mega) {
         this.mega = mega;
+      
         System.out.println("MegaMain instance constructor");
     }
 	 
