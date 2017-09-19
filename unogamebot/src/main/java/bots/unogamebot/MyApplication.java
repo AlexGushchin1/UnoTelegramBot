@@ -12,7 +12,7 @@ public class MyApplication {
         this.mega = mega;
       
         
-        System.out.println("MegaMain instance constructor");
+      //  System.out.println("MegaMain instance constructor");
     }
 	 
 	 
