@@ -14,11 +14,7 @@ public class AppDemo {
 	    {
 		 System.out.println("AppDemo:");
 		 
-		
-		 
-		// EnumMap<Color, String> stateMap = new EnumMap<Color, String>(Color.class);
-	    //stateMap.get(Color.BLUE);
-		 
+
 		 
 		 Game newgame = new Game(103178L);
 		 
@@ -32,34 +28,7 @@ public class AppDemo {
 		 
 		 newgame.getDealer().printCards();
 		 
-		 //newgame.getDealer().
-		 
-		 
-		 
-		// 
-		// 
-		 
-		 //Player pl5 =  pl3;
-		// newgame.setPlayers(newgame.addNewPlayer(pl2));;
-		 //newgame.setPlayers(newgame.addNewPlayer(pl3));
-		 //
-		 // Player pl4 = new Player(222L,"AA",LocalDateTime.now());
-		 // newgame.setPlayers(newgame.addNewPlayer(pl4));
-		 // System.out.println("00S");
-		  
-		 // Set<Player> players = newgame.getPlayers();
-		 // players.stream().forEach(e->System.out.println(e.getName()));
-		  
-//		 if(newgame.getPlayers().stream().filter(e->e.getId().equals(222L)).count()==0 ) {
-//			
-//		 } else
-//		 {
-//			
-//		 }
-		 
-		 //Stream.filter(java.util.function.Predicate<? super T>)
-		 
-		 
+
 		 
 		 
 		 

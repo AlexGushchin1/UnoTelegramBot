@@ -32,7 +32,7 @@ public class CardValueInitializer implements EnumService {
 	
 	@Override
 	public String getCardValue(CardValue cv) {
-		return "test";
+		return "1";
 	}
 	
 	public CardValue getCardValue(String cv) {

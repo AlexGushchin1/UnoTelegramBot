@@ -15,9 +15,6 @@ public class App
 
          TelegramBotsApi botsApi = new TelegramBotsApi();
          
-         //Injector injector = Guice.createInjector(new AppInjector());
-         
-         // Register our bot
          try {
              botsApi.registerBot(new UnoGameBot());
          } catch (TelegramApiException e) {
