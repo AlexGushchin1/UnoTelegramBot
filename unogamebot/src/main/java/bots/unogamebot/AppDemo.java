@@ -14,7 +14,6 @@ public class AppDemo {
 	    {
 		 System.out.println("AppDemo:");
 		 
-
 		 
 		 Game newgame = new Game(103178L);
 		 
