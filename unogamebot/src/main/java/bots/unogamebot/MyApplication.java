@@ -11,6 +11,7 @@ public class MyApplication {
     public MyApplication(EnumService mega) {
         this.mega = mega;
       
+        
         System.out.println("MegaMain instance constructor");
     }
 	 
