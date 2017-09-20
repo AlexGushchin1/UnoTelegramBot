@@ -25,6 +25,7 @@ public class Game {
 	public Game(long chatId) {
 		this();
 		this.chatId = chatId;
+		this.regDT   = LocalDateTime.now();
 	}
 	
 	
