@@ -18,8 +18,6 @@ import inf.EnumService;
 
 public class UnoGameBot extends TelegramLongPollingBot {
 	   
-
-
 	@Override
     public void onUpdateReceived(Update update) {
 		
