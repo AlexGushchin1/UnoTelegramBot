@@ -24,7 +24,20 @@ public class Player {
 		//this.cards.addAll(dealer.give7cards());
 	}
 	
+	public void printCards(){
+		System.out.println("-----------------------------------------------------------------------");
+		System.out.println("Player "+ name + " cards :");
+		for (Card card : cards){
+			System.out.println("color  : "+card.getColor() + "  "+ "value : "+ card.getValue() );
+		}
+	}
+	
 
+	public void addCards (List<Card> cards  ) {
+		this.cards.addAll(cards);
+	}
+	
+	
 
 	public Long getId() {
 		return id;

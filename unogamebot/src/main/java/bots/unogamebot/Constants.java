@@ -7,5 +7,7 @@ public static final int DECK      = 108 ;
 public static final int COLORS    = 4 ;
 
 public static final int NUMBERS   = 10;
+
+public static final int INIT   = 7;
 	
 }

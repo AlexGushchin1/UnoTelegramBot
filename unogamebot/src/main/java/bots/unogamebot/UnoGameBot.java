@@ -17,21 +17,7 @@ import enums.CardValue;
 import inf.EnumService;
 
 public class UnoGameBot extends TelegramLongPollingBot {
-	
-//	 private final EnumService mega;
-//	  public UnoGameBot() {
-//		  mega=null;
-//		// TODO Auto-generated constructor stub
-//	}
-//	 @Inject
-//	    public UnoGameBot(EnumService mega) {
-//	        this.mega = mega;
-//	        //this.puper = puper;
-//	        System.out.println("MegaMain instance constructor");
-//	    }
-//	 
-	
-   
+	   
 
 
 	@Override
@@ -52,27 +38,6 @@ public class UnoGameBot extends TelegramLongPollingBot {
 		}
 		
 		
-   //	 Injector injector = Guice.createInjector(new AppInjector());
-    	//UnoGameBot main = injector.getInstance(UnoGameBot.class);
-    	//MyApplication app = injector.getInstance(MyApplication.class);
-    //	app.Test1(CardValue.NINE);
-    	//app.
-    	//main.va
-    	//mega.getCardValue(CardValue.NINE);
-    	
-    	//CardValueInitializer cardValueInitializer;// = new CardValueInitializer() 
-        // TODO
-//    	
-//            // Set variables
-//            String message_text = update.getMessage().getText()
-//            long chat_id = update.getMessage().getChatId()
-//
-//           
-//            try {
-//                sendMessage(message); // Sending our message object to user
-//            } catch (TelegramApiException e) {
-//                e.printStackTrace();}
-//    	}
             
     }
 

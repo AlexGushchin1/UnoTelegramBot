@@ -7,7 +7,7 @@ import models.Card;
 public interface Dealer {
 
 	
-	public List<Card> give7cards();
+	public List<Card> giveCards(int c); // c - count of cards
 
 	public void shuffle();
 	

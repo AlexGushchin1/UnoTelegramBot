@@ -21,11 +21,11 @@ public class ClassicDealer implements Dealer {
 	}
 	
 	
-	@Override
-	public List<Card> give7cards() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public List<Card> give7cards() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 	
 
 	public void  shuffle() {
@@ -44,6 +44,18 @@ public class ClassicDealer implements Dealer {
 			System.out.println("color : "+ card.getColor()+ "  value : " + card.getValue());
 		}
 		
+	}
+
+
+	@Override
+	public List<Card> giveCards(int c) {
+		// TODO Auto-generated method stub
+		List<Card> sublist = cards.subList(0, c);
+		cards = cards.subList(c,cards.size());
+		System.out.println("Диллер раздал "+sublist.size() +"карт(ы)");
+		System.out.println("В колоде у диллера осталось  "+cards.size() +"карт(ы)");
+		
+		return sublist;
 	}
 	
 }

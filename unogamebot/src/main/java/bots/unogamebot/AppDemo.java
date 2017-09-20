@@ -5,7 +5,9 @@ import java.util.EnumMap;
 import java.util.Set;
 
 import Dealerpkg.ClassicDealer;
+import Playerpkg.UserPlayer;
 import enums.Color;
+import inf.Dealer;
 import models.Game;
 import models.Player;
 
@@ -19,14 +21,21 @@ public class AppDemo {
 		 
 		 newgame.addDealer(new ClassicDealer());
 		 
-		 Player  pl1 = new Player(222L,"Alex",LocalDateTime.now());
+		 Player  pl1 = new UserPlayer(222L,"Alex",LocalDateTime.now());
 		 
-		 Player  pl2 = new Player(333L,"Serg",LocalDateTime.now());
+		 Player  pl2 = new UserPlayer(333L,"Serg",LocalDateTime.now());
 		 
-		 newgame.getDealer().shuffle();
+		 Dealer dl = newgame.getDealer();
+		 dl.shuffle();
+		 dl.printCards();
 		 
-		 newgame.getDealer().printCards();
+		 pl1.addCards(dl.giveCards(Constants.INIT));
+		 pl2.addCards(dl.giveCards(Constants.INIT));
 		 
+		 pl1.printCards();
+		 
+		 pl2.printCards();
+
 
 		 
 		 
