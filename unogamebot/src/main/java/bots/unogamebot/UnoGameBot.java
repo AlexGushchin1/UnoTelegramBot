@@ -103,8 +103,10 @@ public class UnoGameBot extends TelegramLongPollingBot {
 				
 				if ( (msg.getText().toLowerCase().equals("ready"))){
 					GameLogic gl = new GameLogic();
-					
-					//if(gl.checkready(players)) 
+					Game currentGame = getGameByid(msg.getChatId());
+					if(gl.checkready(currentGame.getPlayers())){
+						
+					}
 					
 				}
 				
