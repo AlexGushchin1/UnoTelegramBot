@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import enums.PlayerStatus;
 import inf.Dealer;
 
 public class Player {
@@ -12,9 +13,25 @@ public class Player {
 	private String		  name;
 	private LocalDateTime regDT;
 	
-	//private 
+	private PlayerStatus status ;
 	
 	
+	public PlayerStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(PlayerStatus status) {
+		this.status = status;
+	}
+
+	public List<Card> getCards() {
+		return cards;
+	}
+
+	public void setCards(List<Card> cards) {
+		this.cards = cards;
+	}
+
 	private List<Card> cards ;
 	
 	public Player(){ cards = new ArrayList<Card>();}

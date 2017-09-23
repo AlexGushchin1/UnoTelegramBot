@@ -2,6 +2,7 @@ package logic;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
@@ -9,7 +10,9 @@ import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import bots.unogamebot.UnoGameBot;
+import enums.PlayerStatus;
 import models.Game;
+import models.Player;
 
 public class GameLogic {
 
@@ -47,8 +50,14 @@ public class GameLogic {
               //  }
 	}
 	
-	
-	
+	public boolean checkready (Set<Player> players) {
+		
+		for (Player pl : players ){
+			 if( pl.getStatus().equals(PlayerStatus.NOT_READY)) return false;
+		}
+		return true;
+		
+	}
 	
 	
 	

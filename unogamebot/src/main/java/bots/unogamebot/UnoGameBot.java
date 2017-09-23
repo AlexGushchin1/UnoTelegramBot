@@ -37,6 +37,15 @@ public class UnoGameBot extends TelegramLongPollingBot {
 		return false;
 	}
 	
+	public Game getGameByid(long id) {
+		for(Game game : activeGames ) {
+			if (game.getChatId() == id) return game;
+		}
+		return null;
+	}
+	
+	
+	
 	@Override
     public void onUpdateReceived(Update update) {
 		
@@ -88,6 +97,22 @@ public class UnoGameBot extends TelegramLongPollingBot {
 						}
 					
 				}
+				
+				
+				
+				
+				if ( (msg.getText().toLowerCase().equals("ready"))){
+					GameLogic gl = new GameLogic();
+					
+					//if(gl.checkready(players)) 
+					
+				}
+				
+				
+				
+				
+				
+				
 		}
 		
 		}
