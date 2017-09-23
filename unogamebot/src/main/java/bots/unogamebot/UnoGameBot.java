@@ -21,11 +21,12 @@ import com.google.inject.Injector;
 
 import enums.CardValue;
 import inf.EnumService;
+import logic.GameLogic;
 import models.Game;
 
 public class UnoGameBot extends TelegramLongPollingBot {
 	   
-	List <Game> activeGames = new ArrayList<Game>();
+	private List <Game> activeGames = new ArrayList<Game>();
 	
 	public boolean hasGame (long chat_id) {
 		
@@ -43,15 +44,33 @@ public class UnoGameBot extends TelegramLongPollingBot {
 		if (update.hasMessage()) {
 			if(update.getMessage().hasText()) {
 				Message msg = update.getMessage();
-				if (msg.getText().equals("new game") || msg.getText().equals("новая игра") ) {
+				if (msg.getText().toLowerCase().equals("new game") || msg.getText().toLowerCase().equals("новая игра") ) {
 					long chat_id = msg.getChatId();
 					SendMessage message = new SendMessage();
 						if (!hasGame(chat_id)){
-							activeGames.add(new Game(chat_id));
-							  // Create a message object object
-								 message.setChatId(chat_id)
-				                        .setText("START NEW GAME");
-							    newSendMessage(message);
+							GameLogic gl = new GameLogic();
+							gl.afterNewGameMessage(this, new Game(chat_id));//, msg);
+							
+							
+//							activeGames.add(new Game(chat_id));
+//							  // Create a message object object
+//								 message.setChatId(chat_id)
+//				                       .setText("выберите режим");
+//								 
+//							    //newSendMessage(message);
+//							InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+//			                List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+//			                List<InlineKeyboardButton> rowInline = new ArrayList<>();
+//			                rowInline.add(new InlineKeyboardButton().setText("pvp").setCallbackData("ng_pvp " +  chat_id));
+//			                rowInline.add(new InlineKeyboardButton().setText("pvb").setCallbackData("ng_pvb " +  chat_id));
+//
+//			                rowsInline.add(rowInline);
+//
+//			                markupInline.setKeyboard(rowsInline);
+//			                message.setReplyMarkup(markupInline);
+//			                newSendMessage(message);
+							
+							
 						} else{
 							message.setChatId(chat_id)
 	                        .setText("Игра уже существует : Начать новую или продолжить?");
@@ -79,23 +98,31 @@ public class UnoGameBot extends TelegramLongPollingBot {
 			CallbackQuery callbackQuery = update.getCallbackQuery();
 			String callbackData =  callbackQuery.getData();
 					String[] ary = callbackData.split(" ");
-					
-				if (ary[0].equals("ng_c")){
-					
-					activeGames.add(new Game(-2030410L));
-					activeGames.add(new Game(-203043L));
-					System.out.println("ary 1 "+ary[1]);
-					System.out.println("activeGames size  ="+activeGames.size());
-					
-					for (Game gm : activeGames){
-						System.out.println("---"+gm.getChatId());
-					}
-					System.out.println("long= "+Long.parseLong(ary[1]));
+				if (ary[0].equals("ng_c")) {
 					List<Game> filteredList = activeGames.stream()
-							.filter(i ->  i.getChatId()!= -204380010l   ).collect(Collectors.toList());
-					System.out.println("filteredList size  ="+filteredList.size());
-					//activeGames.st
+							.filter(i ->  i.getChatId()!= Long.parseLong(ary[1])).collect(Collectors.toList());
+					 filteredList.add(new Game(Long.parseLong(ary[1])));
+					 activeGames.addAll(filteredList);
+						GameLogic gl = new GameLogic();
+						System.out.println("0011");
+						gl.afterNewGameMessage(this, new Game(Long.parseLong(ary[1])));
+					 
 				}
+				
+				if (ary[0].equals("ng_pvp") || ary[0].equals("ng_pvb") ) {
+					if (ary[0].equals("ng_pvp")){
+						 SendMessage message = new SendMessage();
+					 message.setChatId(Long.parseLong(ary[1]))
+	                       .setText("подтвердите готовность pvp");
+					 
+				    newSendMessage(message);
+					}
+					
+					 
+				}	
+				
+				
+			
 		}
 		
 		
@@ -137,6 +164,14 @@ public class UnoGameBot extends TelegramLongPollingBot {
 	
 	//public void newGameLogic
 	
+	public List<Game> getActiveGames() {
+		return activeGames;
+	}
+
+	public void setActiveGames(List<Game> activeGames) {
+		this.activeGames = activeGames;
+	}
+
 	public void newSendMessage (SendMessage  message) {
 		try {
 			sendMessage(message);

@@ -12,6 +12,9 @@ public class Player {
 	private String		  name;
 	private LocalDateTime regDT;
 	
+	//private 
+	
+	
 	private List<Card> cards ;
 	
 	public Player(){ cards = new ArrayList<Card>();}
