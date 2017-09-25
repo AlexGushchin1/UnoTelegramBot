@@ -1,5 +1,6 @@
 package logic;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -9,6 +10,8 @@ import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
+import Playerpkg.UserPlayer;
+import bots.unogamebot.Constants;
 import bots.unogamebot.UnoGameBot;
 import enums.GameMode;
 import enums.PlayerStatus;
@@ -23,7 +26,52 @@ public class GameLogic {
 		
 	}
 	
-	
+	public void afterReadyMessage(UnoGameBot bot , Game currentGame , Message msg ) {
+		
+		if(currentGame.getGameMode().equals(GameMode.PVB)){
+			System.out.println("00123");
+			if  (checkready(currentGame.getPlayers()) == false ) {
+				///addPlayertoGame();
+				System.out.println("00124");
+				int id = msg.getFrom().getId();
+				String userName= msg.getFrom().getUserName();
+				currentGame.addNewPlayer(new UserPlayer(id,userName,LocalDateTime.now()));
+				System.out.println("currentGame  ="+currentGame.getPlayers().size()+"\n");//---------
+				SendMessage message = new SendMessage();
+				 message.setChatId(msg.getChatId())
+                   .setText("Игра началась . Раздаем карты");
+				 
+				 bot.newSendMessage(message);
+				 currentGame.getDealer().shuffle();
+				 for(Player pl: currentGame.getPlayers()){
+					 pl.addCards(currentGame.getDealer().giveCards(Constants.INIT));
+					 pl.printCards();
+					 
+				 }
+				 
+				 
+				 message.setChatId(msg.getChatId())
+                 .setText("Проверьте карты : Ваш ход");
+				 bot.newSendMessage(message);
+				 
+				// currentGame.ge
+				// pl1.addCards(dl.giveCards(Constants.INIT));
+				 //pl2.addCards(dl.giveCards(Constants.INIT));
+				 
+				
+				 
+				// pl2.printCards();
+			}
+			else{
+				
+				SendMessage message = new SendMessage();
+				 message.setChatId(msg.getChatId())
+                   .setText("все игроки готовы");
+			}
+			
+			
+		}
+	}
 	
 	public void afterNewGameMessage(UnoGameBot bot , Game gm ) throws CloneNotSupportedException{//, Message msg
 		long chat_id = gm.getChatId();//msg.getChatId();
@@ -66,7 +114,7 @@ public class GameLogic {
 	public boolean checkready (Set<Player> players ) {
 		//if (gm.equals(GameMode.PVP)){
 		//&& currentGame.getPlayers().size()>1
-		if (players.size()>1){
+		if (players.size()>2){
 			for (Player pl : players ){
 			 if( pl.getStatus().equals(PlayerStatus.NOT_READY)) return false;
 			// System.out.println("Есть не готовые игроки");

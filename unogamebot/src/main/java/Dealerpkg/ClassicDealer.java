@@ -12,9 +12,11 @@ public class ClassicDealer implements Dealer {
 
 	
 	private List<Card> cards ;
+	private List<Card> deck;
 	
 	public ClassicDealer() throws CloneNotSupportedException{
 		cards = new ArrayList<Card>();
+		deck = new ArrayList<Card>();
 		CardBox cardBox = new CardBox();	
 		cards = cardBox.getCardsFromCardBox();
 

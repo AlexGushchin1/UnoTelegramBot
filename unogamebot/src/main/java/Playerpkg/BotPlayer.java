@@ -9,4 +9,9 @@ public class BotPlayer extends Player {
 		this.setStatus(PlayerStatus.READY);
 	}
 	
+	public BotPlayer (long id , String botname){
+		this();//.setStatus(PlayerStatus.READY);
+		this.setName(botname);
+		this.setId(id);
+	}
 }

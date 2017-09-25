@@ -43,7 +43,7 @@ public class UnoGameBot extends TelegramLongPollingBot {
 	}
 	
 	public Game getGameByid(long id) {
-		for(Game game : activeGames ) {
+		for(Game game : activeGames) {
 			if (game.getChatId() == id) return game;
 		}
 		return null;
@@ -114,41 +114,42 @@ public class UnoGameBot extends TelegramLongPollingBot {
 				if ( (msg.getText().toLowerCase().equals("ready"))){
 					GameLogic gl = new GameLogic();
 					Game currentGame = getGameByid(msg.getChatId());
-					if(currentGame.getGameMode().equals(GameMode.PVB)){
-						System.out.println("00123");
-						if  (gl.checkready(currentGame.getPlayers()) == false ) {
-							///addPlayertoGame();
-							System.out.println("00124");
-							int id = msg.getFrom().getId();
-							String userName= msg.getFrom().getUserName();
-							currentGame.addNewPlayer(new UserPlayer(id,userName,LocalDateTime.now()));
-							System.out.println("currentGame  ="+currentGame.getPlayers().size()+"\n");//---------
-							SendMessage message = new SendMessage();
-							 message.setChatId(msg.getChatId())
-		                       .setText("Игра началась . Раздаем карты");
-							 
-							 newSendMessage(message);
-							 currentGame.getDealer().shuffle();
-							 for(Player pl: currentGame.getPlayers()){
-								 pl.addCards(currentGame.getDealer().giveCards(Constants.INIT));
-								 pl.printCards();
-							 }
-							// pl1.addCards(dl.giveCards(Constants.INIT));
-							 //pl2.addCards(dl.giveCards(Constants.INIT));
-							 
-							
-							 
-							// pl2.printCards();
-						}
-						else{
-							
-							SendMessage message = new SendMessage();
-							 message.setChatId(msg.getChatId())
-		                       .setText("все игроки готовы");
-						}
-						
-						
-					}
+					gl.afterReadyMessage(this, currentGame, msg);
+//					if(currentGame.getGameMode().equals(GameMode.PVB)){
+//						System.out.println("00123");
+//						if  (gl.checkready(currentGame.getPlayers()) == false ) {
+//							///addPlayertoGame();
+//							System.out.println("00124");
+//							int id = msg.getFrom().getId();
+//							String userName= msg.getFrom().getUserName();
+//							currentGame.addNewPlayer(new UserPlayer(id,userName,LocalDateTime.now()));
+//							System.out.println("currentGame  ="+currentGame.getPlayers().size()+"\n");//---------
+//							SendMessage message = new SendMessage();
+//							 message.setChatId(msg.getChatId())
+//		                       .setText("Игра началась . Раздаем карты");
+//							 
+//							 newSendMessage(message);
+//							 currentGame.getDealer().shuffle();
+//							 for(Player pl: currentGame.getPlayers()){
+//								 pl.addCards(currentGame.getDealer().giveCards(Constants.INIT));
+//								 pl.printCards();
+//							 }
+//							// pl1.addCards(dl.giveCards(Constants.INIT));
+//							 //pl2.addCards(dl.giveCards(Constants.INIT));
+//							 
+//							
+//							 
+//							// pl2.printCards();
+//						}
+//						else{
+//							
+//							SendMessage message = new SendMessage();
+//							 message.setChatId(msg.getChatId())
+//		                       .setText("все игроки готовы");
+//						}
+//						
+//						
+//					}
 					
 					
 //					if(gl.checkready(currentGame.getPlayers(),currentGame.getGameMode())){
@@ -211,7 +212,9 @@ public class UnoGameBot extends TelegramLongPollingBot {
 					if (ary[0].equals("ng_pvb")) {
 						Game currentGame = getGameByid(Long.parseLong(ary[1]));
 						currentGame.setGameMode(GameMode.PVB);
-						currentGame.addNewPlayer(new BotPlayer());
+						
+						currentGame.addNewPlayer(new BotPlayer(1l,"Mike"));
+						currentGame.addNewPlayer(new BotPlayer(2l,"John"));
 						System.out.println("currentGame pl ="+currentGame.getPlayers().size()+"\n");//---------
 						//System.out.println(currentGame.getPlayers().stream().count());
 						 SendMessage message = new SendMessage();
