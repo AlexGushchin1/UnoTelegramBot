@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import Dealerpkg.ClassicDealer;
+import enums.GameMode;
 import inf.Dealer;
 
 public class Game {
@@ -14,6 +16,7 @@ public class Game {
 	private boolean 	  isOver;
 	private LocalDateTime regDT;
 	private Set<Player>	  players;
+	private GameMode gameMode;
 	
 	private Dealer dealer; 
 	
@@ -22,10 +25,11 @@ public class Game {
 		this.regDT   = LocalDateTime.now();
 	}
 	
-	public Game(long chatId) {
+	public Game(long chatId) throws CloneNotSupportedException {
 		this();
 		this.chatId = chatId;
 		this.regDT   = LocalDateTime.now();
+		this.dealer = new ClassicDealer();
 	}
 	
 	
@@ -86,6 +90,14 @@ public class Game {
 
 	public void setDealer(Dealer dealer) {
 		this.dealer = dealer;
+	}
+
+	public GameMode getGameMode() {
+		return gameMode;
+	}
+
+	public void setGameMode(GameMode gameMode) {
+		this.gameMode = gameMode;
 	}
 	
 	

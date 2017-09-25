@@ -2,6 +2,7 @@ package bots.unogamebot;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,10 +20,14 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
+import Playerpkg.BotPlayer;
+import Playerpkg.UserPlayer;
 import enums.CardValue;
+import enums.GameMode;
 import inf.EnumService;
 import logic.GameLogic;
 import models.Game;
+import models.Player;
 
 public class UnoGameBot extends TelegramLongPollingBot {
 	   
@@ -58,7 +63,12 @@ public class UnoGameBot extends TelegramLongPollingBot {
 					SendMessage message = new SendMessage();
 						if (!hasGame(chat_id)){
 							GameLogic gl = new GameLogic();
-							gl.afterNewGameMessage(this, new Game(chat_id));//, msg);
+							try {
+								gl.afterNewGameMessage(this, new Game(chat_id));
+							} catch (CloneNotSupportedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}//, msg);
 							
 							
 //							activeGames.add(new Game(chat_id));
@@ -104,9 +114,50 @@ public class UnoGameBot extends TelegramLongPollingBot {
 				if ( (msg.getText().toLowerCase().equals("ready"))){
 					GameLogic gl = new GameLogic();
 					Game currentGame = getGameByid(msg.getChatId());
-					if(gl.checkready(currentGame.getPlayers())){
+					if(currentGame.getGameMode().equals(GameMode.PVB)){
+						System.out.println("00123");
+						if  (gl.checkready(currentGame.getPlayers()) == false ) {
+							///addPlayertoGame();
+							System.out.println("00124");
+							int id = msg.getFrom().getId();
+							String userName= msg.getFrom().getUserName();
+							currentGame.addNewPlayer(new UserPlayer(id,userName,LocalDateTime.now()));
+							System.out.println("currentGame  ="+currentGame.getPlayers().size()+"\n");//---------
+							SendMessage message = new SendMessage();
+							 message.setChatId(msg.getChatId())
+		                       .setText("Игра началась . Раздаем карты");
+							 
+							 newSendMessage(message);
+							 currentGame.getDealer().shuffle();
+							 for(Player pl: currentGame.getPlayers()){
+								 pl.addCards(currentGame.getDealer().giveCards(Constants.INIT));
+								 pl.printCards();
+							 }
+							// pl1.addCards(dl.giveCards(Constants.INIT));
+							 //pl2.addCards(dl.giveCards(Constants.INIT));
+							 
+							
+							 
+							// pl2.printCards();
+						}
+						else{
+							
+							SendMessage message = new SendMessage();
+							 message.setChatId(msg.getChatId())
+		                       .setText("все игроки готовы");
+						}
+						
 						
 					}
+					
+					
+//					if(gl.checkready(currentGame.getPlayers(),currentGame.getGameMode())){
+//						System.out.println("Все игроки готовы");
+//					} else {
+//						if (gl.checkready(currentGame.getPlayers())==false){
+//							
+//						}
+//					}
 					
 				}
 				
@@ -128,22 +179,53 @@ public class UnoGameBot extends TelegramLongPollingBot {
 				if (ary[0].equals("ng_c")) {
 					List<Game> filteredList = activeGames.stream()
 							.filter(i ->  i.getChatId()!= Long.parseLong(ary[1])).collect(Collectors.toList());
-					 filteredList.add(new Game(Long.parseLong(ary[1])));
+					 try {
+						filteredList.add(new Game(Long.parseLong(ary[1])));
+					} catch (NumberFormatException | CloneNotSupportedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					 activeGames.addAll(filteredList);
 						GameLogic gl = new GameLogic();
 						System.out.println("0011");
-						gl.afterNewGameMessage(this, new Game(Long.parseLong(ary[1])));
+						try {
+							gl.afterNewGameMessage(this, new Game(Long.parseLong(ary[1])));
+						} catch (NumberFormatException | CloneNotSupportedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					 
 				}
 				
 				if (ary[0].equals("ng_pvp") || ary[0].equals("ng_pvb") ) {
-					if (ary[0].equals("ng_pvp")){
+					if (ary[0].equals("ng_pvp")) {
+						Game currentGame = getGameByid(Long.parseLong(ary[1]));
+						currentGame.setGameMode(GameMode.PVP);
 						 SendMessage message = new SendMessage();
 					 message.setChatId(Long.parseLong(ary[1]))
 	                       .setText("подтвердите готовность pvp");
 					 
 				    newSendMessage(message);
 					}
+					
+					if (ary[0].equals("ng_pvb")) {
+						Game currentGame = getGameByid(Long.parseLong(ary[1]));
+						currentGame.setGameMode(GameMode.PVB);
+						currentGame.addNewPlayer(new BotPlayer());
+						System.out.println("currentGame pl ="+currentGame.getPlayers().size()+"\n");//---------
+						//System.out.println(currentGame.getPlayers().stream().count());
+						 SendMessage message = new SendMessage();
+					 message.setChatId(Long.parseLong(ary[1]))
+	                       .setText("подтвердите готовность pvb");
+					 
+				    newSendMessage(message);
+					}
+					
+					
+					
+					
+					
+					
 					
 					 
 				}	

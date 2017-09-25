@@ -10,6 +10,7 @@ import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import bots.unogamebot.UnoGameBot;
+import enums.GameMode;
 import enums.PlayerStatus;
 import models.Game;
 import models.Player;
@@ -24,7 +25,7 @@ public class GameLogic {
 	
 	
 	
-	public void afterNewGameMessage(UnoGameBot bot , Game gm ){//, Message msg
+	public void afterNewGameMessage(UnoGameBot bot , Game gm ) throws CloneNotSupportedException{//, Message msg
 		long chat_id = gm.getChatId();//msg.getChatId();
 		
 		SendMessage message = new SendMessage();
@@ -50,16 +51,34 @@ public class GameLogic {
               //  }
 	}
 	
-	public boolean checkready (Set<Player> players) {
-		
-		for (Player pl : players ){
+	public boolean checkready (Set<Player> players , GameMode gm) {
+		if (gm.equals(GameMode.PVP)){
+			for (Player pl : players ){
 			 if( pl.getStatus().equals(PlayerStatus.NOT_READY)) return false;
+			 System.out.println("Есть не готовые игроки");
+			}
 		}
+		
 		return true;
 		
 	}
 	
-	
+	public boolean checkready (Set<Player> players ) {
+		//if (gm.equals(GameMode.PVP)){
+		//&& currentGame.getPlayers().size()>1
+		if (players.size()>1){
+			for (Player pl : players ){
+			 if( pl.getStatus().equals(PlayerStatus.NOT_READY)) return false;
+			// System.out.println("Есть не готовые игроки");
+			}
+		}
+		else return false;
+			
+		//}
+		
+		return true;
+		
+	}
 	
 	
 	
