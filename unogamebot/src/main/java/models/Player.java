@@ -13,6 +13,8 @@ public class Player {
 	private String		  name;
 	private LocalDateTime regDT;
 	
+	private List<Card> cards ;
+	
 	private PlayerStatus status ;
 	
 	
@@ -32,7 +34,7 @@ public class Player {
 		this.cards = cards;
 	}
 
-	private List<Card> cards ;
+	public List<Card> makeMove (Game gm){ return null;}
 	
 	public Player(){ cards = new ArrayList<Card>();}
 	
@@ -45,16 +47,41 @@ public class Player {
 	}
 	
 	public void printCards(){
-		System.out.println("-----------------------------------------------------------------------");
+		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 		System.out.println("Player "+ name + " cards :");
 		for (Card card : cards){
 			System.out.println("color  : "+card.getColor() + "  "+ "value : "+ card.getValue() );
 		}
+		System.out.println("card size = "+ this.cards.size());
+		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+		
 	}
 	
 
 	public void addCards (List<Card> cards  ) {
 		this.cards.addAll(cards);
+	}
+	
+	
+//	public List<Card> putCards() {
+//		// TODO Auto-generated method stub
+//		List<Card> sublist = cards.subList(0, c);
+//		cards = cards.subList(c,cards.size());
+//		System.out.println("Диллер раздал "+sublist.size() +"карт(ы)");
+//		System.out.println("В колоде у диллера осталось  "+cards.size() +"карт(ы)");
+//		
+//
+//		
+//		
+//		//deck.
+//		
+//		return sublist;
+//	}
+	
+	
+	
+	public List<Card> makeMove () {
+		return null;
 	}
 	
 	
