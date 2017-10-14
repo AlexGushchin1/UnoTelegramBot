@@ -24,8 +24,7 @@ public class AppDemo {
 	 public static void main( String[] args ) throws CloneNotSupportedException
 	    {
 		 System.out.println("AppDemo:");
-		 
-		 
+
 		 Game newgame = new Game(103178L);
 		 
 		 newgame.addDealer(new ClassicDealer());
@@ -63,11 +62,13 @@ public class AppDemo {
 		 System.out.println("(before) Deck card : "+ dl.getDeckCard().getColor() + " " +dl.getDeckCard().getValue()); 
 		 // почему то всегда RED ZERO ?? - неверно !!!
 		 
-//		List <Card> tmp = new ArrayList<Card>();
-//		Card tmpCard = new  Card(CardType.ACTION, Color.RED, CardValue.PLUS2);
-//		tmp.add(tmpCard);
-//		 dl.puttoDeck(tmp);
-//		 System.out.println("(after) Deck card : "+ dl.getDeckCard().getColor() + " " +dl.getDeckCard().getValue()); 
+		List <Card> tmp = new ArrayList<Card>();
+		Card tmpCard = new  Card(CardType.WILD, Color.BLACK, CardValue.PLUS4);
+		tmp.add(tmpCard);
+		dl.puttoDeck(tmp);
+		dl.changecheckPLUS4Param(true);
+		dl.setChangeColorParam(Color.YELLOW);
+		System.out.println("(after) Deck card : "+ dl.getDeckCard().getColor() + " " +dl.getDeckCard().getValue()); 
 		 
 	        while(deque.peek()!=null) {
 	        	

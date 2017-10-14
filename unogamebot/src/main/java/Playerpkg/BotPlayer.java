@@ -34,44 +34,51 @@ public class BotPlayer extends Player {
 		System.out.println("открытая карта : " + dl.getDeckCard().getColor() + " " + dl.getDeckCard().getValue());
 		Color chngColor = gm.getDealer().getChangeColorParam();
 		
+		
 		if (deckCard.getColor().equals(Color.BLACK)) {
-			//System.out.println("if black ----->!!!");//System.out.println("if plus 4 ----->!!!");
-			
 			
 				if (deckCard.getType().equals(CardType.WILD) && deckCard.getValue().equals(CardValue.PLUS4)) {
 					
-					if (gm.getDealer().getcheckPLUS4Param() == true) {
+					if (gm.getDealer().getcheckPLUS4Param() == true) { 
 						
-						System.out.println("Игрок "+ this.getName() + " берет 4 карты и пропускает ход");
-						this.addCards(gm.getDealer().giveCards(4));
-						gm.getDealer().changecheckPLUS4Param(false);
-						this.printCards();
-						return Collections.EMPTY_LIST;// игрок берет карты но не делает ход
-					} else {
-						System.out.println("игрок ищет карту "+ chngColor + " цвета ");
+							System.out.println("Игрок "+ this.getName() + " берет 4 карты и пропускает ход");
+							this.addCards(gm.getDealer().giveCards(4));
+							gm.getDealer().changecheckPLUS4Param(false); //cледующий игрок не будет брать карты - он делает обычный ход
+							this.printCards();
+							
+					return Collections.EMPTY_LIST; // игрок берет карты но не делает ход
+					
+					} else { //игрок ходит после игрока взявшего 4-ре карты
+						
+						System.out.println("игрок ищет карту "+ chngColor + " цвета "); 
+						
 						List<Card> findCard = getCardByColor(chngColor);
 						
-						if ( findCard.size() > 0 ) {
-							checkBlackAndChangeColor(findCard,gm.getDealer());
-							gm.getDealer().puttoDeck(findCard);
-							//
-							
-						}
+							if ( findCard.size() > 0 ) { // нашли карту соответствующего цвета
+								System.out.println("Игрок "+ this.getName() + " делает ход : {" + findCard.get(0).getColor() +
+										" " + findCard.get(0).getValue()+"}" );
+								gm.getDealer().puttoDeck(findCard);////
+								checkBlackAndChangeColor(findCard,gm.getDealer());
+									
+							}
 							 else {
-							this.addCards(gm.getDealer().giveCards(1));
-							findCard = getCardByColor(chngColor);
-								if ( findCard.size() > 0 ) {
-									checkBlackAndChangeColor(findCard,gm.getDealer());
-									gm.getDealer().puttoDeck(findCard);
-								}
-							//gm.getDealer().puttoDeck(getCardByColor(chngColor));
-						}
+								 System.out.println("Игрок "+ this.getName() + " берет 1 карту");
+								 this.addCards(gm.getDealer().giveCards(1));
+								 findCard = getCardByColor(chngColor);
+									if ( findCard.size() > 0 ) {
+										
+										gm.getDealer().puttoDeck(findCard);
+										checkBlackAndChangeColor(findCard,gm.getDealer());	//gm.getDealer().puttoDeck(getCardByColor(chngColor));
+									} else { System.out.println("Игроку нечем ходить - {ПРОПУСК ХОДА}");}
+									
+							
+							 }
 						
 						
 						this.printCards();
 						
 						
-					}
+							}
 	
 				}
 			
@@ -91,6 +98,28 @@ public class BotPlayer extends Player {
 							this.printCards();
 							
 							
+						} else {
+							System.out.println("игрок ищет карту "+ chngColor + " цвета ");
+							List<Card> findCard = getCardByColor(chngColor);
+							
+							if ( findCard.size() > 0 ) {
+								checkBlackAndChangeColor(findCard,gm.getDealer());
+								gm.getDealer().puttoDeck(findCard);
+								//
+								
+							}
+								 else {
+								this.addCards(gm.getDealer().giveCards(1));
+								findCard = getCardByColor(chngColor);
+									if ( findCard.size() > 0 ) {
+										checkBlackAndChangeColor(findCard,gm.getDealer());
+										gm.getDealer().puttoDeck(findCard);
+									}
+								//gm.getDealer().puttoDeck(getCardByColor(chngColor));
+							}
+							
+							
+							this.printCards();
 						}
 					
 				}
@@ -142,16 +171,51 @@ public class BotPlayer extends Player {
 				System.out.println("SKIP or Reverse");
 				
 				if ( deckCard.getValue().equals(CardValue.REVERSE)) {
+					
 					if (gm.getDealer().getcheckPLUS4Param() == true) {
 						gm.getDealer().changecheckPLUS4Param(false);
 					}
+					else {
+						List<Card> findCard = getCardByColorAndValue(deckCard.getColor(),deckCard.getValue());
+						if ( findCard.size() > 0 ) {
+							checkBlackAndChangeColor(findCard,gm.getDealer());
+							gm.getDealer().puttoDeck(findCard); 
+						}
+							
+						
+						else {
+							this.addCards(gm.getDealer().giveCards(1));
+							gm.getDealer().puttoDeck(getCardByColor(chngColor));
+						}
+					}
+					
+					
+//					if (gm.getDealer().getcheckPLUS4Param() == true) {
+//						gm.getDealer().changecheckPLUS4Param(false);
+//					}
+					
 					}
 				
 				if ( deckCard.getValue().equals(CardValue.SKIP)) {
-					if (gm.getDealer().getcheckPLUS4Param() == true) {
-						gm.getDealer().changecheckPLUS4Param(false);
-					}
-					}
+						if (gm.getDealer().getcheckPLUS4Param() == true) {
+							gm.getDealer().changecheckPLUS4Param(false);
+						}
+						else {
+							List<Card> findCard = getCardByColorAndValue(deckCard.getColor(),deckCard.getValue());
+							if ( findCard.size() > 0 ) {
+								checkBlackAndChangeColor(findCard,gm.getDealer());
+								gm.getDealer().puttoDeck(findCard); 
+							}
+								
+							
+							else {
+								this.addCards(gm.getDealer().giveCards(1));
+								gm.getDealer().puttoDeck(getCardByColor(chngColor));
+							}
+						}
+				
+				
+				}
 				
 				} else { // ОСТАЮТСЯ ЧИСЛА
 					System.out.println("игрок ищет карту "+ deckCard.getColor() + " цвета " + "или " + deckCard.getValue() );
@@ -190,14 +254,33 @@ public class BotPlayer extends Player {
 	
 	
 	private void checkBlackAndChangeColor (List<Card> cards , Dealer dl ) {
-		Card card = cards.get(0);
-		
+		Card card = cards.get(cards.size()-1);//?
+		checkActionCards(cards,dl);
 		if (card.getType().equals(CardType.WILD) && card.getColor().equals(Color.BLACK)) {
 			dl.changecheckPLUS4Param(true);
 			dl.setChangeColorParam(Color.YELLOW);
+			System.out.println("Новый цвет :"+ Color.YELLOW);
 		}
 		
 	}
+	
+	private void checkActionCards (List<Card> cards , Dealer dl ) {
+		Card card = cards.get(cards.size()-1);//?
+		
+		if (card.getType().equals(CardType.ACTION) &&  ( card.getValue().equals(CardValue.PLUS2)    ||  
+														 card.getValue().equals(CardValue.REVERSE)  ||
+														 card.getValue().equals(CardValue.SKIP) )) {
+		dl.changecheckPLUS4Param(true);
+				if (card.getValue().equals(CardValue.PLUS2)) {
+					dl.setChangeColorParam(Color.YELLOW);
+					System.out.println("Новый цвет :"+ Color.YELLOW);
+				}
+			
+		}
+		
+	}
+	
+	
 	
 	
 	private List<Card> getCardByColorAndValue(Color findColor , CardValue cardValue) {
@@ -241,6 +324,9 @@ public class BotPlayer extends Player {
 			if (resultblack.isPresent()) {
 								
 				findResult.add(resultblack.get());
+				
+				
+				
 				this.getCards().remove(resultblack.get());
 			} 
 		}
