@@ -33,13 +33,15 @@ public class AppDemo {
 		 
 		 //Player  pl2 = new UserPlayer(333L,"Serg",LocalDateTime.now());
 		 
-		 Player  b_pl2 = new BotPlayer(333L,"Mike");
-		 Player  b_pl3 = new BotPlayer(334L,"John");
+		 Player  b_pl2 = new BotPlayer(333L,"Eric");
+		 Player  b_pl3 = new BotPlayer(334L,"Kile");
+		 Player  b_pl4 = new BotPlayer(335L,"Stan");
 		 Dealer dl = newgame.getDealer();
 		 Set <Player> players = new HashSet <Player>();
 		 //players.add(pl1);
 		 players.add(b_pl2);
 		 players.add(b_pl3);
+		 players.add(b_pl4);
 		 newgame.setPlayers(players);
 		 
 		 dl.shuffle();
@@ -56,6 +58,7 @@ public class AppDemo {
 		 Deque<Player>deque = new ArrayDeque<Player>();
 		 deque.addFirst(b_pl3);
 		 deque.addFirst(b_pl2);
+		 deque.addFirst(b_pl4);
 		 //deque.addFirst(pl1);
 		 
 		 System.out.println("++++++++++++++++++++++++++++++++++");
@@ -63,11 +66,11 @@ public class AppDemo {
 		 // почему то всегда RED ZERO ?? - неверно !!!
 		 
 		List <Card> tmp = new ArrayList<Card>();
-		Card tmpCard = new  Card(CardType.WILD, Color.BLACK, CardValue.PLUS4);
-		tmp.add(tmpCard);
-		dl.puttoDeck(tmp);
-		dl.changecheckPLUS4Param(true);
-		dl.setChangeColorParam(Color.YELLOW);
+//		Card tmpCard = new  Card(CardType.ACTION, Color.GREEN, CardValue.SKIP);
+//		tmp.add(tmpCard);
+//		dl.puttoDeck(tmp);
+//		dl.changecheckPLUS4Param(true);
+//		dl.setChangeColorParam(Color.GREEN);
 		System.out.println("(after) Deck card : "+ dl.getDeckCard().getColor() + " " +dl.getDeckCard().getValue()); 
 		 
 	        while(deque.peek()!=null) {
@@ -76,15 +79,23 @@ public class AppDemo {
 	        	System.out.println("Ход игрока "+ P.getName());
 	        	P.makeMove(newgame);
 	        	
-	        	
+	        	for (Player pp : players){
+	        		if (pp.getCards().size() == 0) {
+	        			System.out.println("ПОБЕДИЛ ИГРОК "+ P.getName());
+	        			try {
+	    	                Thread.sleep(66500);
+	    	          } catch (InterruptedException e) {} 
+	        		}
+	        	}
 	            // извлечение c начала
 	        	
 	        	 
 	           // System.out.println(P.getName());
 	            deque.addLast(P);
 	            
+	            
 	            try {
-	                Thread.sleep(2000);
+	                Thread.sleep(50);
 	          } catch (InterruptedException e) {} 
 	        }
 		 

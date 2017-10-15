@@ -101,6 +101,11 @@ public class ClassicDealer implements Dealer {
 	@Override
 	public List<Card> giveCards(int c) {
 		// TODO Auto-generated method stub
+		if (cards.size() < 5){
+			//List<Card> tmp = deck.
+			cards.addAll(deck);
+			deck.removeAll(deck.subList(0, deck.size()-2));
+		}
 		List<Card> sublist = cards.subList(0, c);
 		cards = cards.subList(c,cards.size());
 		System.out.println("Диллер раздал "+sublist.size() +"карт(ы)");
