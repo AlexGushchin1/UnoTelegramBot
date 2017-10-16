@@ -43,6 +43,7 @@ public class Player {
 		this.id = id;
 		this.name = name;
 		this.regDT = regDT;
+		this.status = PlayerStatus.READY;
 		//this.cards.addAll(dealer.give7cards());
 	}
 	

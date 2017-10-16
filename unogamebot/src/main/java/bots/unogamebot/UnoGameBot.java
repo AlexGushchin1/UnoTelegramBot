@@ -4,13 +4,23 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.telegram.telegrambots.api.methods.AnswerInlineQuery;
+import org.telegram.telegrambots.api.methods.ParseMode;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.api.objects.CallbackQuery;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
+import org.telegram.telegrambots.api.objects.inlinequery.ChosenInlineQuery;
+import org.telegram.telegrambots.api.objects.inlinequery.InlineQuery;
+import org.telegram.telegrambots.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent;
+import org.telegram.telegrambots.api.objects.inlinequery.result.InlineQueryResult;
+import org.telegram.telegrambots.api.objects.inlinequery.result.InlineQueryResultArticle;
+import org.telegram.telegrambots.api.objects.inlinequery.result.InlineQueryResultPhoto;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -55,10 +65,93 @@ public class UnoGameBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
 		
 		
+		if (update.hasInlineQuery()){
+			InlineQuery query = update.getInlineQuery();
+			if (query.getQuery().equals("mycards")) {
+				
+				AnswerInlineQuery answer = new AnswerInlineQuery();
+				answer.setPersonal(false);
+				answer.setInlineQueryId(query.getId());
+				InlineKeyboardMarkup replyMarkup = createKeyboard("111");
+				
+				InlineQueryResultArticle article = new InlineQueryResultArticle();
+				InlineQueryResultPhoto aaa= new InlineQueryResultPhoto ();
+				aaa.setId("pic1");
+				aaa.setPhotoUrl("https://pp.userapi.com/c639922/v639922180/52071/UrQh8CU8IU4.jpg");
+				aaa.setThumbUrl("https://pp.userapi.com/c639922/v639922180/52071/UrQh8CU8IU4.jpg");
+				
+				
+				//ChosenInlineQuery qq = new ChosenInlineQuery();
+				
+				article.setTitle("синяя 4 ");
+				article.setReplyMarkup(replyMarkup);
+				article.setId("plug2");
+				article.setThumbUrl("https://pp.userapi.com/c639922/v639922579/52de6/8e3HgRiPAos.jpg");
+				
+				InlineQueryResultArticle article2 = new InlineQueryResultArticle();
+				article2.setTitle("красная 7 ");
+				article2.setReplyMarkup(replyMarkup);
+				article2.setId("plug3");
+				article2.setThumbUrl("https://pp.userapi.com/c639922/v639922579/52ded/FwNlMjYEnTM.jpg");
+				
+				
+				InputTextMessageContent textMessageContent = new InputTextMessageContent();
+				//textMessageContent.setParseMode("<a href=\"' + https://pp.userapi.com/c639922/v639922579/52ded/FwNlMjYEnTM.jpg + '\"></a>");
+				textMessageContent.setMessageText("*Buttplug*\nConnecting...");
+				article.setInputMessageContent(textMessageContent);
+				///textMessageContent.
+				//article.set
+				InputTextMessageContent textMessageContent2 = new InputTextMessageContent();
+				textMessageContent2.setMessageText("*Buttplug*\nConnecting...");
+				article2.setInputMessageContent(textMessageContent2);
+				
+				List<InlineQueryResult>lst = new ArrayList<InlineQueryResult>();
+				lst.add(article);lst.add(article2);
+				lst.add(aaa);
+				
+				answer.setResults(lst);
+				
+				
+				
+				//final InlineKeyboardMarkup replyMarkup = createKeyboard(id);
+				 
+				
+				
+				
+				
+				answer.setCacheTime(0);
+				
+				try {
+					answerInlineQuery(answer);
+				} catch (final TelegramApiException e) {
+					//logger.warn("Failed to send message: {}", answer, e);
+				}
+				List<InlineQueryResult> queryResults = new ArrayList<>();
+				InlineQueryResultArticle in = new InlineQueryResultArticle();
+				
+				
+				
+				//BaseResponse response = bot.execute(new AnswerInlineQuery(inlineQuery.id(), r1, r2, r3, r4, r5));
+
+//				queryResults.add(in
+//	                    .parseMode(ParseMode.MARKDOWN)
+//	                    .title("Custom Markdown")
+//	                    .description("description")
+//	                    .disableWebPagePreview(true)
+//	                    .messageText("")
+//	                    .build()
+//	                    );
+			}
+		}
+		
+		
 		if (update.hasMessage()) {
 			if(update.getMessage().hasText()) {
 				Message msg = update.getMessage();
-				if (msg.getText().toLowerCase().equals("new game") || msg.getText().toLowerCase().equals("новая игра") ) {
+				
+				String msgtextLC = msg.getText().toLowerCase();
+				
+				if (msgtextLC.equals("new game") || msgtextLC.equals("новая игра") ) {
 					long chat_id = msg.getChatId();
 					SendMessage message = new SendMessage();
 						if (!hasGame(chat_id)){
@@ -111,7 +204,7 @@ public class UnoGameBot extends TelegramLongPollingBot {
 				
 				
 				
-				if ( (msg.getText().toLowerCase().equals("ready"))){
+				if ( (msgtextLC.equals("ready"))){
 					GameLogic gl = new GameLogic();
 					Game currentGame = getGameByid(msg.getChatId());
 					gl.afterReadyMessage(this, currentGame, msg);
@@ -199,6 +292,7 @@ public class UnoGameBot extends TelegramLongPollingBot {
 				}
 				
 				if (ary[0].equals("ng_pvp") || ary[0].equals("ng_pvb") ) {
+					
 					if (ary[0].equals("ng_pvp")) {
 						Game currentGame = getGameByid(Long.parseLong(ary[1]));
 						currentGame.setGameMode(GameMode.PVP);
@@ -210,16 +304,21 @@ public class UnoGameBot extends TelegramLongPollingBot {
 					}
 					
 					if (ary[0].equals("ng_pvb")) {
-						Game currentGame = getGameByid(Long.parseLong(ary[1]));
-						currentGame.setGameMode(GameMode.PVB);
 						
+						Game currentGame = getGameByid(Long.parseLong(ary[1]));
+						
+						currentGame.setGameMode(GameMode.PVB);
 						currentGame.addNewPlayer(new BotPlayer(1l,"Mike"));
 						currentGame.addNewPlayer(new BotPlayer(2l,"John"));
-						System.out.println("currentGame pl ="+currentGame.getPlayers().size()+"\n");//---------
-						//System.out.println(currentGame.getPlayers().stream().count());
-						 SendMessage message = new SendMessage();
-					 message.setChatId(Long.parseLong(ary[1]))
+						
+						SendMessage message = new SendMessage();
+						
+						message.setChatId(Long.parseLong(ary[1]))
 	                       .setText("подтвердите готовность pvb");
+						
+						
+
+						 	
 					 
 				    newSendMessage(message);
 					}
@@ -310,4 +409,66 @@ public class UnoGameBot extends TelegramLongPollingBot {
 		
 	return "empty token string";
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    private InlineKeyboardMarkup createKeyboard(String id) {
+		final InlineKeyboardMarkup replyMarkup = new InlineKeyboardMarkup();
+		final List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+		rows.add(new ArrayList<>());
+		rows.get(0).add(new InlineKeyboardButton().setText("💓 2s").setCallbackData(id + "|buzz"));
+		rows.get(0).add(
+				new InlineKeyboardButton().setText("💓 "  + "s").setCallbackData(id + "|sine"));
+		rows.add(new ArrayList<>());
+		rows.get(1).add(new InlineKeyboardButton().setText("∿ slower").setCallbackData(id + "|interval+"));
+		rows.get(1).add(new InlineKeyboardButton().setText("∿ faster").setCallbackData(id + "|interval-"));
+		rows.add(new ArrayList<>());
+		rows.get(2).add(new InlineKeyboardButton().setText("- 10 %").setCallbackData(id + "|amplitude-"));
+		rows.get(2).add(new InlineKeyboardButton().setText("+ 10 %").setCallbackData(id + "|amplitude+"));
+		replyMarkup.setKeyboard(rows);
+		return replyMarkup;
+	}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

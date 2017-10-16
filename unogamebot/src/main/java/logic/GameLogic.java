@@ -10,6 +10,7 @@ import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
+import Playerpkg.BotPlayer;
 import Playerpkg.UserPlayer;
 import bots.unogamebot.Constants;
 import bots.unogamebot.UnoGameBot;
@@ -27,49 +28,83 @@ public class GameLogic {
 	}
 	
 	public void afterReadyMessage(UnoGameBot bot , Game currentGame , Message msg ) {
+		SendMessage message = new SendMessage();
 		
-		if(currentGame.getGameMode().equals(GameMode.PVB)){
-			System.out.println("00123");
+		if(currentGame.getGameMode().equals(GameMode.PVB)) {
+			
 			if  (checkready(currentGame.getPlayers()) == false ) {
-				///addPlayertoGame();
-				System.out.println("00124");
-				int id = msg.getFrom().getId();
-				String userName= msg.getFrom().getUserName();
-				currentGame.addNewPlayer(new UserPlayer(id,userName,LocalDateTime.now()));
-				System.out.println("currentGame  ="+currentGame.getPlayers().size()+"\n");//---------
-				SendMessage message = new SendMessage();
-				 message.setChatId(msg.getChatId())
-                   .setText("Игра началась . Раздаем карты");
-				 
-				 bot.newSendMessage(message);
-				 currentGame.getDealer().shuffle();
-				 for(Player pl: currentGame.getPlayers()){
-					 pl.addCards(currentGame.getDealer().giveCards(Constants.INIT));
-					 pl.printCards();
-					 
-				 }
-				 
-				 
-				 message.setChatId(msg.getChatId())
-                 .setText("Проверьте карты : Ваш ход");
-				 bot.newSendMessage(message);
-				 
-				// currentGame.ge
-				// pl1.addCards(dl.giveCards(Constants.INIT));
-				 //pl2.addCards(dl.giveCards(Constants.INIT));
-				 
 				
-				 
-				// pl2.printCards();
-			}
-			else{
+				int fromId = msg.getFrom().getId();
+				String fromName = msg.getFrom().getUserName();
+				currentGame.addNewPlayer(new UserPlayer(fromId, fromName,LocalDateTime.now()));
 				
-				SendMessage message = new SendMessage();
-				 message.setChatId(msg.getChatId())
-                   .setText("все игроки готовы");
+			} 
+			else {
+				currentGame.AddPlayersToDeque();
+				Player nextPlayer =  currentGame.getNextPlayer();
+				
+				message.setChatId(msg.getChatId())
+				 		.setText("Ход игрока " + nextPlayer.getName() );
+				bot.newSendMessage(message);
+				if (nextPlayer instanceof BotPlayer) {
+			 		nextPlayer.makeMove();
+			 		//currentGame.nextMove();
+			 		message = new SendMessage();
+				 	message.setChatId(msg.getChatId())
+				 		.setText("Ход игрока " + currentGame.nextMove().getName() );
+			 		bot.newSendMessage(message);
+//			 	}
+				
 			}
 			
 			
+//			if  (checkready(currentGame.getPlayers()) == false ) {
+//
+//				int id = msg.getFrom().getId();
+//				String userName = msg.getFrom().getUserName();
+//				
+//				
+//				
+//				message.setChatId(msg.getChatId()).setText("Игрок " + userName + " готов ! " );
+//				bot.newSendMessage(message);
+//				
+//				
+//				
+//				
+//				//System.out.println("currentGame  ="+currentGame.getPlayers().size()+"\n");//---------
+//				
+//				 message.setChatId(msg.getChatId())
+//                   .setText("Игра началась . Раздаем карты");
+//				 
+//				 bot.newSendMessage(message);
+//				 currentGame.getDealer().shuffle();
+//				 for(Player pl: currentGame.getPlayers()){
+//					 pl.addCards(currentGame.getDealer().giveCards(Constants.INIT));
+//					 pl.printCards();
+//					 
+//				 }
+//				 
+//				 
+//				 message.setChatId(msg.getChatId())
+//                 .setText("Проверьте Ваши карты : ");
+//				 bot.newSendMessage(message);
+//				 
+//				// currentGame.ge
+//				// pl1.addCards(dl.giveCards(Constants.INIT));
+//				 //pl2.addCards(dl.giveCards(Constants.INIT));
+//				 
+//				
+//				 
+//				// pl2.printCards();
+//			}
+//			else{
+//				
+//				SendMessage message = new SendMessage();
+//				 message.setChatId(msg.getChatId())
+//                   .setText("все игроки готовы");
+//			}
+//			
+			}
 		}
 	}
 	
