@@ -20,6 +20,11 @@ public interface Dealer {
 	
 	public boolean getcheckPLUS4Param();
 	
+	public boolean getNextMoveflag();
+	
+	public void setNextMoveflag(boolean bValue);
+	
+	
 	public void puttoDeck (List<Card> cards);
 	
 	public void changecheckPLUS4Param(boolean bValue);

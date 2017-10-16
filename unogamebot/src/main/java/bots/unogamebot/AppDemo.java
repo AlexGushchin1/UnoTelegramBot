@@ -65,7 +65,7 @@ public class AppDemo {
 		 System.out.println("(before) Deck card : "+ dl.getDeckCard().getColor() + " " +dl.getDeckCard().getValue()); 
 		 // почему то всегда RED ZERO ?? - неверно !!!
 		 
-		List <Card> tmp = new ArrayList<Card>();
+//		List <Card> tmp = new ArrayList<Card>();
 //		Card tmpCard = new  Card(CardType.ACTION, Color.GREEN, CardValue.SKIP);
 //		tmp.add(tmpCard);
 //		dl.puttoDeck(tmp);

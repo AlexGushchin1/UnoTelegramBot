@@ -17,6 +17,20 @@ public class ClassicDealer implements Dealer {
 	
 	private Color ChangeColor;// = Color.GREEN ; //вернуть на пустое значение 
 	private boolean checkPLUS4 = false ;//= true; // вернуть на false
+	
+	private boolean nextMoveFl = false ;
+	
+	
+	
+	
+	public boolean isNextMoveFl() {
+		return nextMoveFl;
+	}
+
+	public void setNextMoveFl(boolean nextMoveFl) {
+		this.nextMoveFl = nextMoveFl;
+	}
+
 	public void changecheckPLUS4Param(boolean bValue){
 		checkPLUS4 = bValue;
 	}
@@ -137,5 +151,20 @@ public class ClassicDealer implements Dealer {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public boolean getNextMoveflag() {
+		// TODO Auto-generated method stub
+		return isNextMoveFl();
+	}
+
+	@Override
+	public void setNextMoveflag(boolean bValue) {
+		setNextMoveFl(bValue);
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 	
 }

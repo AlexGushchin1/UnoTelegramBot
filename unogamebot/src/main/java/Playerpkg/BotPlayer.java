@@ -23,77 +23,48 @@ public class BotPlayer extends Player {
 	}
 	
 	public BotPlayer (long id , String botname){
-		this();//.setStatus(PlayerStatus.READY);
+		this();
 		this.setName(botname);
 		this.setId(id);
 	}
 	@Override
 	public List<Card> makeMove (Game gm) {
 
-		Dealer dl= gm.getDealer();
-		Card deckCard = gm.getDealer().getDeckCard(); 
-		System.out.println("открытая карта : " + dl.getDeckCard().getColor() + " " + dl.getDeckCard().getValue());
-		Color chngColor = gm.getDealer().getChangeColorParam();
+		Dealer 	   dl		 = gm.getDealer();
+		Card 	   deckCard  = gm.getDealer().getDeckCard();
+		CardType   dcType 	 = deckCard.getType();	
+		CardValue  dcValue 	 = deckCard.getValue();
+		Color 	   chngColor = gm.getDealer().getChangeColorParam();
+		
+		//System.out.println("открытая карта : " + dl.getDeckCard().getColor() + " " + dl.getDeckCard().getValue());
+		printOpenCard(deckCard);
+		
+		
 		
 		
 		if (deckCard.getColor().equals(Color.BLACK)) {
 			
-				if (deckCard.getType().equals(CardType.WILD) && deckCard.getValue().equals(CardValue.PLUS4)) {
+				if (dcType.equals(CardType.WILD) && dcValue.equals(CardValue.PLUS4)) {
 					
-					if (dl.getcheckPLUS4Param() == true) { 
+					if (dl.getNextMoveflag() == true) { 
 						
 							System.out.println("Игрок "+ this.getName() + " берет 4 карты и пропускает ход");
-							this.addCards(dl.giveCards(4));
-							dl.changecheckPLUS4Param(false); //cледующий игрок не будет брать карты - он делает обычный ход
-							//this.printCards();
+							this.addCards(dl.giveCards(4));	
+							dl.setNextMoveflag(false);
 							
 					return Collections.EMPTY_LIST; // игрок берет карты но не делает ход
 					
 					} else { //игрок ходит после игрока взявшего 4-ре карты
 						
-						System.out.println("игрок ищет карту "+ chngColor + " цвета "); 
+						findCardActions(dl, chngColor);
 						
-						List<Card> findCard = getCardByColor(chngColor);
-						
-							makeMoveOrTakeCard(dl, chngColor, findCard);
-						
-						
-						//this.printCards();
-						
-						
-							}
-					//this.printCards();
+					  }
+
 				}
 			
-				if (deckCard.getType().equals(CardType.WILD) && deckCard.getValue().equals(CardValue.CHANGECOLOR)) {
+				if (dcType.equals(CardType.WILD) && dcValue.equals(CardValue.CHANGECOLOR)) {
 					
-					System.out.println("Игрок "+ this.getName() + " должен найти карту " + chngColor + " цвета" );
-						
-					List<Card> findCard = getCardByColor(chngColor);
-					makeMoveOrTakeCard(dl, chngColor, findCard);
-//					if ( findCard.size() > 0 ) {
-//						gm.getDealer().puttoDeck(findCard);
-//						printMove(findCard);
-//						checkBlackAndChangeColor(findCard,dl);
-//						
-//					}   else {
-//						
-//						System.out.println("Игрок "+ this.getName() + " берет 1 карту");
-//						 this.addCards(dl.giveCards(1));
-//						 findCard = getCardByColor(chngColor);
-//							if ( findCard.size() > 0 ) {
-//								
-//								dl.puttoDeck(findCard);
-//								checkBlackAndChangeColor(findCard, dl);	//gm.getDealer().puttoDeck(getCardByColor(chngColor));
-//							} else { System.out.println("Игроку нечем ходить - {ПРОПУСК ХОДА} ");}
-//								//this.addCards(gm.getDealer().giveCards(1));
-//								//gm.getDealer().puttoDeck(getCardByColor(chngColor));
-//						}
-					
-					
-					
-					
-
+					findCardActions(dl, chngColor);
 					
 				}
 				
@@ -312,6 +283,16 @@ public class BotPlayer extends Player {
 		return null;
 	}
 
+	/**
+	 * @param dl
+	 * @param chngColor
+	 */
+	private void findCardActions(Dealer dl, Color chngColor) {
+		printFindColor(chngColor);	
+		List<Card> findCard = getCardByColor(chngColor);
+		makeMoveOrTakeCard(dl, chngColor, findCard);
+	}
+
 	
 	/**
 	 * @param dl
@@ -443,6 +424,15 @@ public class BotPlayer extends Player {
 		System.out.println("Игрок "+ this.getName() + 
 				" делает ход : {" + card.get(0).getColor() + " " + card.get(0).getValue() + "}" );
 	}
+		
+	private void printOpenCard(Card openCard ) { 
+		System.out.println("открытая карта : " + openCard.getColor() + " " + openCard.getValue());
+	}
+	
+	private void printFindColor(Color findcolor ) { 
+		System.out.println("Игрок "+ this.getName() + " должен найти карту " + findcolor + " цвета" );
+	}
+	
 	
 	
 	
