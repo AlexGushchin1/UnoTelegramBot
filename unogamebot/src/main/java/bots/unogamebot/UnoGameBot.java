@@ -63,10 +63,34 @@ public class UnoGameBot extends TelegramLongPollingBot {
 	
 	@Override
     public void onUpdateReceived(Update update) {
+		if (update.hasCallbackQuery()){
+			System.out.println("----9----->");
+			System.out.println("--------->"+update.getCallbackQuery().getMessage().getText());
+			
+		}
+//		update.hasInlineQuery()){
+//			InlineQuery query = update.getInlineQuery();
+//			if (query.getQuery().equals("mycards")) {
+//				
+//			}
+//		}
+		
+		
+		
 		
 		
 		if (update.hasInlineQuery()){
 			InlineQuery query = update.getInlineQuery();
+			
+			if (query.getQuery().equals("sayuno")) {
+				
+			}
+			
+//			if (query.getQuery().equals("unoto")) {
+//				
+//			}
+			
+			
 			if (query.getQuery().equals("mycards")) {
 				
 				AnswerInlineQuery answer = new AnswerInlineQuery();
@@ -74,12 +98,21 @@ public class UnoGameBot extends TelegramLongPollingBot {
 				answer.setInlineQueryId(query.getId());
 				InlineKeyboardMarkup replyMarkup = createKeyboard("111");
 				
+				
+				//SendPhoto sendPhoto = new SendPhoto();
+				//sendPhoto.setNewPhoto(file)
+				//this.sendPhoto(sendPhoto);
+				InlineQueryResult rez = new InlineQueryResultPhoto();
+			
+				
 				InlineQueryResultArticle article = new InlineQueryResultArticle();
 				InlineQueryResultPhoto aaa= new InlineQueryResultPhoto ();
 				aaa.setId("pic1");
 				aaa.setPhotoUrl("https://pp.userapi.com/c639922/v639922180/52071/UrQh8CU8IU4.jpg");
 				aaa.setThumbUrl("https://pp.userapi.com/c639922/v639922180/52071/UrQh8CU8IU4.jpg");
-				
+				InputTextMessageContent t2 = new InputTextMessageContent();
+				t2.setMessageText("+4");
+				aaa.setInputMessageContent(t2);
 				
 				//ChosenInlineQuery qq = new ChosenInlineQuery();
 				
@@ -151,17 +184,21 @@ public class UnoGameBot extends TelegramLongPollingBot {
 				
 				String msgtextLC = msg.getText().toLowerCase();
 				
+				System.out.println("--------->"+msgtextLC);
+				String[] tmpr = msgtextLC.split(" ");
+				////System.out.println(tmpr[0]);
+				//System.out.println(tmpr[1]);
 				if (msgtextLC.equals("new game") || msgtextLC.equals("новая игра") ) {
 					long chat_id = msg.getChatId();
 					SendMessage message = new SendMessage();
-						if (!hasGame(chat_id)){
+						if (!hasGame(chat_id)) {
 							GameLogic gl = new GameLogic();
+							
 							try {
+								
 								gl.afterNewGameMessage(this, new Game(chat_id));
-							} catch (CloneNotSupportedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}//, msg);
+								
+							} catch (CloneNotSupportedException e) {e.printStackTrace();}
 							
 							
 //							activeGames.add(new Game(chat_id));
@@ -254,6 +291,35 @@ public class UnoGameBot extends TelegramLongPollingBot {
 //					}
 					
 				}
+				
+				
+				
+				
+				
+				
+				
+				
+				if (tmpr[0].equals("ход") && tmpr[1].equals("игрока") ) {
+					System.out.println("test z112");
+					String[] tmp = msgtextLC.split(" ");
+					Player nextPlayer = this.getGameByid(msg.getChatId()).getNextPlayer();
+					//nextPlayer.getName() );
+//					bot.newSendMessage(message);
+					
+					if (nextPlayer instanceof BotPlayer) {
+						System.out.println("test z222");
+						 nextPlayer.makeMove(this,this.getGameByid(msg.getChatId()));
+				 		//currentGame.nextMove();
+				 		SendMessage message = new SendMessage();
+				 		message = new SendMessage();
+					 	message.setChatId(msg.getChatId())
+					 		.setText("Ход игрока {01} " + this.getGameByid(msg.getChatId()).nextMove().getName() );
+				 		newSendMessage(message);
+					}
+					
+				}
+				
+				
 				
 				
 				

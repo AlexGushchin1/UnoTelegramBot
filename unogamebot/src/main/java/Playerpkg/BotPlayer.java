@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import org.telegram.telegrambots.api.methods.send.SendMessage;
+
+import bots.unogamebot.UnoGameBot;
 import enums.CardType;
 import enums.CardValue;
 import enums.Color;
@@ -27,6 +30,22 @@ public class BotPlayer extends Player {
 		this.setName(botname);
 		this.setId(id);
 	}
+	
+	@Override
+	public List<Card> makeMove (UnoGameBot bot , Game gm) {
+		System.out.println("test z3");
+		makeMove(gm);
+		Player p = gm.nextMove();
+ 		SendMessage message = new SendMessage();
+ 		message = new SendMessage();
+	 	message.setChatId(gm.getChatId())
+	 		.setText("Ход игрока " + p );
+	 	bot.newSendMessage(message);
+		return null;
+		
+	}
+	
+	
 	
 	@Override
 	public List<Card> makeMove (Game gm) {

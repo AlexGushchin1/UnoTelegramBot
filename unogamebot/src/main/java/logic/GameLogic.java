@@ -40,22 +40,34 @@ public class GameLogic {
 				
 			} 
 			else {
-				currentGame.AddPlayersToDeque();
-				Player nextPlayer =  currentGame.getNextPlayer();
+				currentGame.AddPlayersToDeque(); //------------
 				
-				message.setChatId(msg.getChatId())
-				 		.setText("Ход игрока " + nextPlayer.getName() );
+				Player nextPlayer =  currentGame.getNextPlayer(); //------------
+				
+				nextPlayer = currentGame.nextMove();
+				message.setChatId(msg.getChatId()).setText("Ход игрока {00} " + nextPlayer.getName() );
 				bot.newSendMessage(message);
-				if (nextPlayer instanceof BotPlayer) {
-			 		nextPlayer.makeMove();
-			 		//currentGame.nextMove();
-			 		message = new SendMessage();
-				 	message.setChatId(msg.getChatId())
-				 		.setText("Ход игрока " + currentGame.nextMove().getName() );
-			 		bot.newSendMessage(message);
+				
+				
+				
+//				nextPlayer =  
+//				message.setChatId(msg.getChatId())
+//		 		.setText("Ход игрока " + nextPlayer.getName() );
+//				bot.newSendMessage(message);
+				
+//				if (nextPlayer instanceof BotPlayer) {
+//			 		nextPlayer.makeMove();
+//			 		//currentGame.nextMove();
+//			 		message = new SendMessage();
+//				 	message.setChatId(msg.getChatId())
+//				 		.setText("Ход игрока " + currentGame.nextMove().getName() );
+//			 		bot.newSendMessage(message);
+//				}
+				
+				
 //			 	}
 				
-			}
+			//}
 			
 			
 //			if  (checkready(currentGame.getPlayers()) == false ) {

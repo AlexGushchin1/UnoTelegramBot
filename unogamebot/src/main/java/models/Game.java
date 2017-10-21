@@ -43,8 +43,9 @@ public class Game {
 	
 	public Player nextMove () {
 		Player  P = deque.pop();
+		Player  P2 = deque.getFirst();
 		deque.addLast(P);
-		return P;
+		return P2;
 	}
 	 //deque.addFirst(b_pl3);
 	 //deque.addFirst(b_pl2);

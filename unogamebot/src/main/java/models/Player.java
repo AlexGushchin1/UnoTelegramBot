@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import bots.unogamebot.UnoGameBot;
 import enums.PlayerStatus;
 import inf.Dealer;
 
@@ -81,11 +82,13 @@ public class Player {
 	
 	
 	
-	public List<Card> makeMove () {
+	public List<Card> makeMove (UnoGameBot bot , Game gm) {
 		return null;
 	}
 	
-	
+	public List<Card> makeMove () {
+		return null;
+	}
 
 	public Long getId() {
 		return id;
