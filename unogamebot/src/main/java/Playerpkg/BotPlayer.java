@@ -33,14 +33,152 @@ public class BotPlayer extends Player {
 	
 	@Override
 	public List<Card> makeMove (UnoGameBot bot , Game gm) {
-		System.out.println("test z3");
-		makeMove(gm);
-		Player p = gm.nextMove();
- 		SendMessage message = new SendMessage();
- 		message = new SendMessage();
-	 	message.setChatId(gm.getChatId())
-	 		.setText("Ход игрока " + p );
-	 	bot.newSendMessage(message);
+		
+		
+		Dealer 	   dl		 = gm.getDealer();
+		Card 	   deckCard  = gm.getDealer().getDeckCard();
+		CardType   dcType 	 = deckCard.getType();	
+		CardValue  dcValue 	 = deckCard.getValue();
+		Color 	   chngColor = gm.getDealer().getChangeColorParam();
+		
+
+		printOpenCard(deckCard);
+		
+		
+		if (deckCard.getColor().equals(Color.BLACK)) {
+			
+				if (dcType.equals(CardType.WILD) && dcValue.equals(CardValue.PLUS4)) {
+					
+					if (dl.getNextMoveflag() == true) { 
+						
+							//System.out.println("Игрок "+ this.getName() + " берет 4 карты и пропускает ход");
+						SendMessage message = new SendMessage();
+				 			message = new SendMessage();
+				 				message.setChatId(gm.getChatId())
+				 					.setText("Игрок "+ this.getName() + " берет 4 карты и пропускает ход");
+				 						bot.newSendMessage(message);
+							this.addCards(dl.giveCards(4));	
+							dl.setNextMoveflag(false);
+							
+					return Collections.EMPTY_LIST; // игрок берет карты но не делает ход
+					
+					} else { //игрок ходит после игрока взявшего 4-ре карты
+						
+						//findCardActions(dl, chngColor);
+						findCardActions(dl, chngColor,bot,gm);
+						
+					  }
+
+				}
+			
+				if (dcType.equals(CardType.WILD) && dcValue.equals(CardValue.CHANGECOLOR)) {
+					
+					//findCardActions(dl, chngColor);
+					findCardActions(dl, chngColor,bot,gm);
+					
+				}
+				
+			
+			
+		this.printCards();
+			
+			
+		}  else { // FOR NOT BLACK CARDS ==================================================================================
+				
+			
+				if (dcType.equals(CardType.ACTION)) { // skip or reverse card
+					
+					if (dcValue.equals(CardValue.PLUS2)) {
+						
+						if (dl.getNextMoveflag() == true) { 
+							
+							//System.out.println("Игрок "+ this.getName() + " берет 2 карты и пропускает ход");
+							SendMessage message = new SendMessage();
+				 			message = new SendMessage();
+				 				message.setChatId(gm.getChatId())
+				 					.setText("Игрок "+ this.getName() + " берет 2 карты и пропускает ход");
+				 						bot.newSendMessage(message);
+				 						
+							this.addCards(dl.giveCards(2));
+							dl.setNextMoveflag(false);
+							
+		
+					return Collections.EMPTY_LIST; // игрок берет карты но не делает ход
+					
+						} else { //игрок ходит после игрока взявшего 4-ре карты
+							
+								printFindColor(chngColor);
+								List<Card> findCard = getCardByColor(chngColor);							
+								makeMoveOrTakeCard(dl, chngColor, findCard,bot,gm);
+								
+							}
+						
+						
+					}
+					
+// 	-------------------------------------------------------------------------------------------------------------------				
+					
+					if (dcValue.equals(CardValue.SKIP)) {
+						if (dl.getNextMoveflag() == true) { 
+							
+							//System.out.println("Игрок "+ this.getName() + " пропускает ход");
+							SendMessage message = new SendMessage();
+				 			message = new SendMessage();
+				 				message.setChatId(gm.getChatId())
+				 					.setText("Игрок "+ this.getName() + " пропускает ход");
+				 						bot.newSendMessage(message);
+
+							dl.setNextMoveflag(false);
+					return Collections.EMPTY_LIST; // игрок берет карты но не делает ход
+					
+						} else { //игрок ходит после игрока взявшего 4-ре карты
+							
+								findCardbyColorValueActions(dl, deckCard, chngColor,bot,gm);
+							
+	
+							
+							}
+					}
+					
+					
+//	-------------------------------------------------------------------------------------------------------------------						
+					
+					if (dcValue.equals(CardValue.REVERSE)) {
+						
+						findCardbyColorValueActions(dl, deckCard, chngColor ,bot , gm);
+						
+						
+					}
+					
+					
+					
+				} 
+				
+		else { // for color numbers cards 
+			findCardbyColorValueActions(dl, deckCard, chngColor,bot,gm);		
+								
+		}
+			
+			
+
+				
+	}	
+		
+		
+		
+		
+//		System.out.println("test z3");
+//		makeMove(gm);
+//		
+//		
+//		SendMessage message = new SendMessage();
+// 		message = new SendMessage();
+//	 	message.setChatId(gm.getChatId())
+//	 		.setText("its a trap from  " + gm.getNextPlayer().getName() );
+//	 	bot.newSendMessage(message);
+//	 	
+//		Player p = gm.nextMove();
+// 		
 		return null;
 		
 	}
@@ -188,6 +326,75 @@ public class BotPlayer extends Player {
 		List<Card> findCard = getCardByColor(chngColor);
 		makeMoveOrTakeCard(dl, chngColor, findCard);
 	}
+	
+	//----------------------------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	
+	
+	
+	private void findCardbyColorValueActions(Dealer dl, Card deckCard, Color chngColor , UnoGameBot bot , Game currentGame) {
+		//printFindColorValue(deckCard.getColor(), deckCard.getValue());
+		
+		List<Card> findCard = getCardByColorAndValue(deckCard.getColor(), deckCard.getValue()); 
+
+		makeMoveOrTakeCard(dl, chngColor, findCard , bot , currentGame );
+	}
+	
+	
+	
+	private void findCardActions(Dealer dl, Color chngColor , UnoGameBot bot , Game currentGame ) {
+		//printFindColor(chngColor);	
+		List<Card> findCard = getCardByColor(chngColor);
+		makeMoveOrTakeCard(dl, chngColor, findCard ,bot , currentGame );
+	}
+	
+	private void makeMoveOrTakeCard(Dealer dl, Color chngColor, List<Card> findCard , UnoGameBot bot , Game currentGame) {
+		if ( findCard.size() > 0 ) { // нашли карту соответствующего цвета
+			//printMove(findCard);//System.out.println("Игрок "+ this.getName() + " делает ход : {" + findCard.get(0).getColor() + //" " + findCard.get(0).getValue()+"}" );
+			printMove(findCard,bot,currentGame );
+			dl.puttoDeck(findCard);////
+			checkBlackAndChangeColor(findCard,dl);
+				
+		}
+		 else {
+			// System.out.println("Игрок "+ this.getName() + " берет 1 карту");
+				SendMessage message = new SendMessage();
+	 			message = new SendMessage();
+	 				message.setChatId(currentGame.getChatId())
+	 					.setText("Игрок "+ this.getName() + " берет 1 карту");
+	 						bot.newSendMessage(message);
+			 bot.newSendMessage(message);
+			 this.addCards(dl.giveCards(1));
+			 findCard = getCardByColor(chngColor);
+				if ( findCard.size() > 0 ) {
+					
+					dl.puttoDeck(findCard);
+					checkBlackAndChangeColor(findCard, dl);	//gm.getDealer().puttoDeck(getCardByColor(chngColor));
+				} else {
+					//System.out.println("Игроку нечем ходить - {ПРОПУСК ХОДА} ");
+					message = new SendMessage();
+	 				message.setChatId(currentGame.getChatId())
+	 					.setText("Игрок "+ this.getName() + " {ПРОПУСК ХОДА}");
+	 						bot.newSendMessage(message);
+	 						bot.newSendMessage(message);
+					
+				}
+				
+		
+		 }
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	//----------------------------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
 
 	
 	/**
@@ -198,6 +405,7 @@ public class BotPlayer extends Player {
 	private void makeMoveOrTakeCard(Dealer dl, Color chngColor, List<Card> findCard) {
 		if ( findCard.size() > 0 ) { // нашли карту соответствующего цвета
 			printMove(findCard);//System.out.println("Игрок "+ this.getName() + " делает ход : {" + findCard.get(0).getColor() + //" " + findCard.get(0).getValue()+"}" );
+			//printMove(findCard,this,);
 			dl.puttoDeck(findCard);////
 			checkBlackAndChangeColor(findCard,dl);
 				
@@ -320,6 +528,18 @@ public class BotPlayer extends Player {
 		System.out.println("Игрок "+ this.getName() + 
 				" делает ход : {" + card.get(0).getColor() + " " + card.get(0).getValue() + "}" );
 	}
+	
+	private void printMove(List<Card> card , UnoGameBot bot , Game currentGame  ) {
+		SendMessage message = new SendMessage();
+			message = new SendMessage();
+				message.setChatId(currentGame.getChatId())
+					.setText("Игрок "+ this.getName() +
+							" делает ход : {" + card.get(0).getColor() + " " + card.get(0).getValue() + "}");
+		bot.newSendMessage(message);
+		//System.out.println("Игрок "+ this.getName() + 
+			//	" делает ход : {" + card.get(0).getColor() + " " + card.get(0).getValue() + "}" );
+	}
+	
 		
 	private void printOpenCard(Card openCard ) { 
 		System.out.println("открытая карта : " + openCard.getColor() + " " + openCard.getValue());

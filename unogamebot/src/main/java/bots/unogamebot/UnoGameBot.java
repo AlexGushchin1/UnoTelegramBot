@@ -93,10 +93,21 @@ public class UnoGameBot extends TelegramLongPollingBot {
 			
 			if (query.getQuery().equals("mycards")) {
 				
+				String name = update.getInlineQuery().getFrom().getUserName();
+				System.out.println("name = " + name);
+				
+				
+				
 				AnswerInlineQuery answer = new AnswerInlineQuery();
 				answer.setPersonal(false);
 				answer.setInlineQueryId(query.getId());
-				InlineKeyboardMarkup replyMarkup = createKeyboard("111");
+				
+				
+				
+				
+				
+				
+				//InlineKeyboardMarkup replyMarkup = createKeyboard("111");
 				
 				
 				//SendPhoto sendPhoto = new SendPhoto();
@@ -108,22 +119,22 @@ public class UnoGameBot extends TelegramLongPollingBot {
 				InlineQueryResultArticle article = new InlineQueryResultArticle();
 				InlineQueryResultPhoto aaa= new InlineQueryResultPhoto ();
 				aaa.setId("pic1");
-				aaa.setPhotoUrl("https://pp.userapi.com/c639922/v639922180/52071/UrQh8CU8IU4.jpg");
+				aaa.setPhotoUrl("https://pp.userapi.com/c639922/v639922579/52de6/8e3HgRiPAos.jpg");
 				aaa.setThumbUrl("https://pp.userapi.com/c639922/v639922180/52071/UrQh8CU8IU4.jpg");
 				InputTextMessageContent t2 = new InputTextMessageContent();
-				t2.setMessageText("+4");
+				t2.setMessageText("+test");
 				aaa.setInputMessageContent(t2);
 				
 				//ChosenInlineQuery qq = new ChosenInlineQuery();
 				
 				article.setTitle("синяя 4 ");
-				article.setReplyMarkup(replyMarkup);
+				//article.setReplyMarkup(replyMarkup);
 				article.setId("plug2");
 				article.setThumbUrl("https://pp.userapi.com/c639922/v639922579/52de6/8e3HgRiPAos.jpg");
 				
 				InlineQueryResultArticle article2 = new InlineQueryResultArticle();
 				article2.setTitle("красная 7 ");
-				article2.setReplyMarkup(replyMarkup);
+				//article2.setReplyMarkup(replyMarkup);
 				article2.setId("plug3");
 				article2.setThumbUrl("https://pp.userapi.com/c639922/v639922579/52ded/FwNlMjYEnTM.jpg");
 				
@@ -496,22 +507,22 @@ public class UnoGameBot extends TelegramLongPollingBot {
     
     
     
-    private InlineKeyboardMarkup createKeyboard(String id) {
-		final InlineKeyboardMarkup replyMarkup = new InlineKeyboardMarkup();
-		final List<List<InlineKeyboardButton>> rows = new ArrayList<>();
-		rows.add(new ArrayList<>());
-		rows.get(0).add(new InlineKeyboardButton().setText("💓 2s").setCallbackData(id + "|buzz"));
-		rows.get(0).add(
-				new InlineKeyboardButton().setText("💓 "  + "s").setCallbackData(id + "|sine"));
-		rows.add(new ArrayList<>());
-		rows.get(1).add(new InlineKeyboardButton().setText("∿ slower").setCallbackData(id + "|interval+"));
-		rows.get(1).add(new InlineKeyboardButton().setText("∿ faster").setCallbackData(id + "|interval-"));
-		rows.add(new ArrayList<>());
-		rows.get(2).add(new InlineKeyboardButton().setText("- 10 %").setCallbackData(id + "|amplitude-"));
-		rows.get(2).add(new InlineKeyboardButton().setText("+ 10 %").setCallbackData(id + "|amplitude+"));
-		replyMarkup.setKeyboard(rows);
-		return replyMarkup;
-	}
+//    private InlineKeyboardMarkup createKeyboard(String id) {
+//		final InlineKeyboardMarkup replyMarkup = new InlineKeyboardMarkup();
+//		final List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+//		rows.add(new ArrayList<>());
+//		rows.get(0).add(new InlineKeyboardButton().setText("💓 2s").setCallbackData(id + "|buzz"));
+//		rows.get(0).add(
+//				new InlineKeyboardButton().setText("💓 "  + "s").setCallbackData(id + "|sine"));
+//		rows.add(new ArrayList<>());
+//		rows.get(1).add(new InlineKeyboardButton().setText("∿ slower").setCallbackData(id + "|interval+"));
+//		rows.get(1).add(new InlineKeyboardButton().setText("∿ faster").setCallbackData(id + "|interval-"));
+//		rows.add(new ArrayList<>());
+//		rows.get(2).add(new InlineKeyboardButton().setText("- 10 %").setCallbackData(id + "|amplitude-"));
+//		rows.get(2).add(new InlineKeyboardButton().setText("+ 10 %").setCallbackData(id + "|amplitude+"));
+//		replyMarkup.setKeyboard(rows);
+//		return replyMarkup;
+//	}
     
     
     

@@ -16,6 +16,7 @@ import bots.unogamebot.Constants;
 import bots.unogamebot.UnoGameBot;
 import enums.GameMode;
 import enums.PlayerStatus;
+import inf.Dealer;
 import models.Game;
 import models.Player;
 
@@ -42,11 +43,60 @@ public class GameLogic {
 			else {
 				currentGame.AddPlayersToDeque(); //------------
 				
-				Player nextPlayer =  currentGame.getNextPlayer(); //------------
+				//=======================
+				Dealer dl = currentGame.getDealer();
+				 dl.shuffle();
+				 dl.shuffle();
+				 dl.shuffle();
+				 
+				 for (Player player : currentGame.getPlayers()) {
+					 player.addCards(dl.giveCards(Constants.INIT));
+					 player.printCards();
+				 }
+				//=======================
 				
-				nextPlayer = currentGame.nextMove();
-				message.setChatId(msg.getChatId()).setText("Ход игрока {00} " + nextPlayer.getName() );
+				System.out.println("Игроки-1");
+				for ( Player p : currentGame.getPlayers()) {
+					p.printCards();
+					System.out.println(p.getName());
+				}
+				
+				//
+				Player nextPlayer =  currentGame.getNextPlayer(); //------------
+				message.setChatId(msg.getChatId()).setText("Ход игрока {p0} " + nextPlayer.getName() );
 				bot.newSendMessage(message);
+
+				nextPlayer = currentGame.nextMove();
+				message.setChatId(msg.getChatId()).setText("Ход игрока {p1} " + nextPlayer.getName() );
+				bot.newSendMessage(message);
+				
+				if (nextPlayer instanceof BotPlayer) {
+					while (nextPlayer instanceof BotPlayer ){
+					nextPlayer.makeMove(bot,currentGame);
+					
+										
+			 		nextPlayer = currentGame.nextMove();//.getNextPlayer()//
+			 		
+			 		message.setChatId(msg.getChatId())
+				 		.setText("Ход игрока {p2} " + nextPlayer.getName());
+			 		bot.newSendMessage(message);
+					}
+
+				}
+				
+//				if (nextPlayer instanceof BotPlayer) {
+//					//System.out.println("test z222");
+//					 
+//			 		//
+//			 		SendMessage message = new SendMessage();
+//			 		message = new SendMessage();
+//				 	
+//				}
+//				
+//				
+//				bot.newSendMessage(message);
+				//nextPlayer = currentGame.nextMove();
+				
 				
 				
 				
